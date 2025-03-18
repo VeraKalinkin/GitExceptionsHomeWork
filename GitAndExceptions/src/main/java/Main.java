@@ -9,17 +9,16 @@ public class Main {
 
         while (!flag){
 
-        flag = true;
-        int number = scanner.nextInt();
+            flag = true;
+            int number = scanner.nextInt();
 
-        try {
-            numberFourException(number);
-        } catch (UnluckyNumberException une){
-            flag = false;
-            System.out.println(une.getMessage());
-            System.out.println("Please try again");
-        }
-
+            try {
+                numberFourException(number);
+            } catch (UnluckyNumberException une){
+                flag = false;
+                System.out.println(une.getMessage());
+                System.out.println("Please try again");
+            }
         }
 
         System.out.println("Good choice!");
@@ -27,7 +26,8 @@ public class Main {
     }
 
     public static void numberFourException(int number) throws UnluckyNumberException{
-        if (number == 4)
+        if (number == 4){
             throw new UnluckyNumberException();
+        }
     }
 }
