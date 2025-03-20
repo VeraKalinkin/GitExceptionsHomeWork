@@ -1,3 +1,4 @@
+
 public class MyArrayList <T extends Comparable<T>> implements MyList{
 
     private final int CAPACITY = 10;
@@ -33,17 +34,56 @@ public class MyArrayList <T extends Comparable<T>> implements MyList{
         return objects[index];
     }
 
+    //region removeMethods
     public boolean removeByIndex(int index) {
-        objects[index] = 0;
+        boolean flag = false;
+        for (int i = 0; i < size; i++) {
+
+            if (i == index){
+                flag = true;
+            }
+
+            if (flag){
+                objects[i] = objects[i+1];
+            }
+        }
+        size--;
         return true;
     }
+
+    @Override
+    public boolean removeElement(Object element) {
+        boolean flag = false;
+        for (int i = 0; i < size; i++) {
+
+            if (objects[i].equals(element)){
+                flag = true;
+            }
+
+            if (flag){
+                objects[i] = objects[i+1];
+            }
+        }
+        size--;
+        return true;
+    }
+
+    public boolean removeFirst(){
+
+        for (int i = 0; i < size; i++) {
+            objects[i] = objects[i+1];
+        }
+
+        objects[size-1] = null;
+        size--;
+        return true;
+    }
+    //endregion
 
     public int getSize(){
         return size;
     }
 
-
-    //region MyListMethods
     @Override
     public boolean add(Object element) {
         objects[size] = element;
@@ -67,17 +107,7 @@ public class MyArrayList <T extends Comparable<T>> implements MyList{
 
     @Override
     public Object getElementByIndex(int index) {
-        return null;
-    }
-
-    @Override
-    public boolean removeElement(Object element) {
-        for (int i = 0; i < size; i++) {
-            if (objects[i].equals(element)){
-                objects[i] = 0;
-            }
-        }
-        return true;
+        return objects[index];
     }
 
     @Override
@@ -92,5 +122,11 @@ public class MyArrayList <T extends Comparable<T>> implements MyList{
     public boolean sortCollection() {
         return false;
     }
-    //endregion
+
+    public void printCollection(){
+        for (int i = 0; i < size; i++) {
+            System.out.println(objects[i]);
+        }
+    }
+
 }
