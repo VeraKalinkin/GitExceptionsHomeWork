@@ -66,12 +66,8 @@ public class MyArrayList <T extends Comparable<T>> implements MyList{
     }
 
     @Override
-    public Object getElement(Object element) {
-        for (Object object : objects){
-            if (object.equals(element))
-                return object;
-        }
-        return false;
+    public Object getElementByIndex(int index) {
+        return null;
     }
 
     @Override
