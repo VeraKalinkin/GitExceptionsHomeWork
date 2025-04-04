@@ -1,43 +1,59 @@
-import java.util.ArrayList;
+public class MergeSort<T extends Comparable<T>> {
 
-public class MergeSort <T extends Comparable<T>>{
+    public static <T extends Comparable<T>> void mergeSortMyLinkedList(MyLinkedList<T> myLinkedList) {
+        int inputLength = myLinkedList.getSize();
 
-    public static <T extends Comparable<T>> ArrayList<T> mergeSortArrayList(ArrayList<T> arrayList){
-        if (arrayList.size() <= 1){
-            return arrayList;
+        if (inputLength <= 1) {
+            return;
         }
-        else {
-            int middle = arrayList.size() / 2;
 
-            ArrayList<T> leftArrayList = new ArrayList<>(arrayList.subList(0, middle));
-            ArrayList<T> rightArrayList = new ArrayList<>(arrayList.subList(middle, arrayList.size()));
+        int midIndex = inputLength / 2;
+        MyLinkedList leftHalf = new MyLinkedList<>();
+        for (int i = 0; i < midIndex; i++) {
+            leftHalf.add(myLinkedList.getElementByIndex(i));
+        }
 
-            return mergeArrayList(mergeSortArrayList(leftArrayList), mergeSortArrayList(rightArrayList));
+        MyLinkedList rightHalf = new MyLinkedList<>();
+        for (int i = midIndex; i < inputLength; i++) {
+            rightHalf.add(myLinkedList.getElementByIndex(i));
+        }
+
+        mergeSortMyLinkedList(leftHalf);
+        mergeSortMyLinkedList(rightHalf);
+
+        merge(myLinkedList, leftHalf, rightHalf);
+
+    }
+
+    private static <T extends Comparable<T>> void merge(MyLinkedList myLinkedList, MyLinkedList leftHalf, MyLinkedList rightHalf) {
+        int leftSize = leftHalf.getSize();
+        int rightSize = rightHalf.getSize();
+
+        int leftI = 0; // i
+        int rightI = 0; // j
+        int mergeI = 0; // k
+
+        while (leftI < leftSize && rightI < rightSize) {
+            if (leftHalf.getElementByIndex(leftI).compareTo(rightHalf.getElementByIndex(rightI)) <= 0) {
+                myLinkedList.swapByIndex(mergeI, leftHalf.getElementByIndex(leftI));
+                leftI++;
+            } else {
+                myLinkedList.swapByIndex(mergeI, rightHalf.getElementByIndex(rightI));
+                rightI++;
+            }
+            mergeI++;
+        }
+
+        while (leftI < leftSize) {
+            myLinkedList.swapByIndex(mergeI, leftHalf.getElementByIndex(leftI));
+            leftI++;
+            mergeI++;
+        }
+        while (rightI < rightSize) {
+            myLinkedList.swapByIndex(mergeI, rightHalf.getElementByIndex(rightI));
+            rightI++;
+            mergeI++;
         }
     }
 
-    private static <T extends Comparable<T>> ArrayList<T> mergeArrayList(ArrayList<T> leftArrayList, ArrayList<T> rightArrayList){
-        ArrayList<T> resultArrayList = new ArrayList<>();
-
-        while (!leftArrayList.isEmpty() & !rightArrayList.isEmpty()){
-
-            if (leftArrayList.get(0).compareTo(rightArrayList.get(0)) < 0){
-                resultArrayList.add(leftArrayList.get(0));
-                leftArrayList.remove(0);
-            }
-            else {
-                resultArrayList.add(rightArrayList.get(0));
-                rightArrayList.remove(0);
-            }
-        }
-
-        if (!leftArrayList.isEmpty()){
-            resultArrayList.addAll(leftArrayList);
-        }
-        if (!rightArrayList.isEmpty()){
-            resultArrayList.addAll(rightArrayList);
-        }
-
-        return resultArrayList;
-    }
 }

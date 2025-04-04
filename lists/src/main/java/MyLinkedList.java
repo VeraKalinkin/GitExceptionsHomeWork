@@ -1,21 +1,20 @@
+public class MyLinkedList<T extends Comparable<T>> {
 
-public class MyLinkedList <T extends Comparable<T>> implements MyList{
-
-    private int size = 0;
-    private Node<Object> head;
-    private Node<Object> tail;
+    private int size;
+    private Node<T> head;
+    private Node<T> tail;
 
     //region constructors
-    public MyLinkedList(){
+    public MyLinkedList() {
         head = null;
         tail = null;
+        size = 0;
     }
-
 
     //endregion
 
     //region NodeClass
-    private static class Node<T>{
+    private static class Node<T> {
         T element;
         Node<T> nextNode;
         Node<T> prevNode;
@@ -28,15 +27,16 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
     }
     //endregion
 
+    public int getSize() {
+        return size;
+    }
 
     //region addMethods
-    @Override
-    public boolean add(Object element) {
-        Node<Object> node = new Node<>(null, element, null);
-        if (head == null){
+    public boolean add(T element) {
+        Node<T> node = new Node<>(null, element, null);
+        if (head == null) {
             head = tail = node;
-        }
-        else {
+        } else {
             tail.nextNode = node;
             node.prevNode = tail;
             tail = node;
@@ -46,8 +46,8 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
         return true;
     }
 
-    public boolean addFirst(Object element){
-        Node<Object> node = new Node<>(null, element, null);
+    public boolean addFirst(T element) {
+        Node<T> node = new Node<>(null, element, null);
         node.nextNode = head;
         head.prevNode = node;
         head = node;
@@ -56,8 +56,8 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
         return true;
     }
 
-    public boolean addLast(Object element){
-        Node<Object> node = new Node<>(null, element, null);
+    public boolean addLast(T element) {
+        Node<T> node = new Node<>(null, element, null);
         node.prevNode = tail;
         tail.nextNode = node;
         tail = node;
@@ -66,20 +66,26 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
         return true;
     }
 
-    @Override
-    public boolean addByIndex(int index, Object element) {
+    public boolean swapByIndex(int index, T element) {
 
-        if (index >= size){
-            System.out.println("Index out of bound");
-            return false;
+        MyLinkedList myLinkedList = this;
+        myLinkedList.getNodeByIndex(index).element = element;
+        return true;
+    }
+
+    public boolean addByIndex(int index, T element) {
+
+        if (index == 0) {
+            add(element);
+            return true;
         }
 
-        Node<Object> node = new Node<>(null, element, null);
+        Node<T> node = new Node<>(null, element, null);
 
-        Node<Object> current = head.nextNode;
+        Node<T> current = head.nextNode;
         for (int i = 1; i < size; i++) {
 
-            if (i == index){
+            if (i == index) {
                 node.nextNode = current;
                 node.prevNode = current.prevNode;
                 current.prevNode = node;
@@ -96,11 +102,10 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
     //endregion
 
     //region removeMethods
-    @Override
-    public boolean removeElement(Object element) {
-        Node<Object> current = head;
-        while (current != null){
-            if (current.element == element){
+    public boolean removeElement(T element) {
+        Node<T> current = head;
+        while (current != null) {
+            if (current.element == element) {
                 current.prevNode.nextNode = current.nextNode;
                 current.nextNode.prevNode = current.prevNode;
                 current.nextNode = null;
@@ -114,17 +119,16 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
         return false;
     }
 
-    @Override
     public boolean removeByIndex(int index) {
 
-        if (index == size-1){
+        if (index == size - 1) {
             removeLast();
             return true;
         }
 
-        Node<Object> current = head;
+        Node<T> current = head;
         for (int i = 0; i < size; i++) {
-            if (i == index){
+            if (i == index) {
                 current.prevNode.nextNode = current.nextNode;
                 current.nextNode.prevNode = current.prevNode;
                 current.nextNode = null;
@@ -138,8 +142,8 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
         return false;
     }
 
-    public boolean removeLast(){
-        Node<Object> current = tail;
+    public boolean removeLast() {
+        Node<T> current = tail;
         tail = current.prevNode;
         tail.nextNode = null;
 
@@ -150,8 +154,8 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
         return true;
     }
 
-    public boolean removeFirst(){
-        Node<Object> current = head;
+    public boolean removeFirst() {
+        Node<T> current = head;
         head = current.nextNode;
         head.prevNode = null;
 
@@ -163,11 +167,10 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
     }
     //endregion
 
-    @Override
-    public Object getElementByIndex(int index) {
-        Node<Object> current = head;
+    public T getElementByIndex(int index) {
+        Node<T> current = head;
         for (int i = 0; i < size; i++) {
-            if (i == index){
+            if (i == index) {
                 return current.element;
             }
             current = current.nextNode;
@@ -175,7 +178,17 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
         return null;
     }
 
-    @Override
+    private Node<T> getNodeByIndex(int index) {
+        Node<T> current = head;
+        for (int i = 0; i < size; i++) {
+            if (i == index) {
+                return current;
+            }
+            current = current.nextNode;
+        }
+        return null;
+    }
+
     public boolean clearCollection() {
         this.head = null;
         this.tail = null;
@@ -184,24 +197,28 @@ public class MyLinkedList <T extends Comparable<T>> implements MyList{
         return true;
     }
 
-    @Override
-    public boolean sortCollection() {
-        return false;
+    public boolean sortCollection(MyLinkedList myLinkedList) {
+        MergeSort.mergeSortMyLinkedList(myLinkedList);
+        return true;
     }
 
-    public void printCollection(){
-        Node<Object> current = head;
-        while (current != null){
-            System.out.println(current.element);
+    public void printCollection() {
+        Node<T> current = head;
+        while (current != null) {
+            System.out.print(current.element);
+            System.out.print(' ');
             current = current.nextNode;
         }
+        System.out.println();
     }
 
-    public void printReverseCollection(){
-        Node<Object> current = tail;
-        while (current != null){
-            System.out.println(current.element);
+    public void printReverseCollection() {
+        Node<T> current = tail;
+        while (current != null) {
+            System.out.print(current.element);
+            System.out.println(' ');
             current = current.prevNode;
         }
+        System.out.println();
     }
 }

@@ -1,20 +1,19 @@
-
-public class MyArrayList <T extends Comparable<T>> implements MyList{
+public class MyArrayList<T extends Comparable<T>> {
 
     private final int CAPACITY = 10;
     private int size = 0;
-    private Object[] objects;
+    private T[] objects;
 
     //region constructors
-    public MyArrayList(int givenCapacity){
+    public MyArrayList(int givenCapacity) {
         objects = (T[]) new Comparable[givenCapacity];
     }
 
-    public MyArrayList(){
+    public MyArrayList() {
         objects = (T[]) new Comparable[CAPACITY];
     }
 
-    public MyArrayList(Object[] array){
+    public MyArrayList(T[] array) {
         objects = (T[]) new Comparable[array.length];
 
         for (int i = 0; i < array.length; i++) {
@@ -25,12 +24,11 @@ public class MyArrayList <T extends Comparable<T>> implements MyList{
 
     //endregion
 
-
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return objects.length == 0;
     }
 
-    public Object getByIndex(int index){
+    public T getByIndex(int index) {
         return objects[index];
     }
 
@@ -39,62 +37,59 @@ public class MyArrayList <T extends Comparable<T>> implements MyList{
         boolean flag = false;
         for (int i = 0; i < size; i++) {
 
-            if (i == index){
+            if (i == index) {
                 flag = true;
             }
 
-            if (flag){
-                objects[i] = objects[i+1];
+            if (flag) {
+                objects[i] = objects[i + 1];
             }
         }
         size--;
         return true;
     }
 
-    @Override
     public boolean removeElement(Object element) {
         boolean flag = false;
         for (int i = 0; i < size; i++) {
 
-            if (objects[i].equals(element)){
+            if (objects[i].equals(element)) {
                 flag = true;
             }
 
-            if (flag){
-                objects[i] = objects[i+1];
+            if (flag) {
+                objects[i] = objects[i + 1];
             }
         }
         size--;
         return true;
     }
 
-    public boolean removeFirst(){
+    public boolean removeFirst() {
 
         for (int i = 0; i < size; i++) {
-            objects[i] = objects[i+1];
+            objects[i] = objects[i + 1];
         }
 
-        objects[size-1] = null;
+        objects[size - 1] = null;
         size--;
         return true;
     }
     //endregion
 
-    public int getSize(){
+    public int getSize() {
         return size;
     }
 
-    @Override
-    public boolean add(Object element) {
+    public boolean add(T element) {
         objects[size] = element;
         size++;
 
         return true;
     }
 
-    @Override
-    public boolean addByIndex(int index, Object element) {
-        if (index >= size){
+    public boolean addByIndex(int index, T element) {
+        if (index > size) {
             System.out.println("Index out of bounds");
             return false;
         }
@@ -105,28 +100,37 @@ public class MyArrayList <T extends Comparable<T>> implements MyList{
         return true;
     }
 
-    @Override
-    public Object getElementByIndex(int index) {
+    public boolean changeByIndex(int index, T element) {
+        if (index > size) {
+            System.out.println("Index out of bounds");
+            return false;
+        }
+        objects[index] = element;
+        return true;
+    }
+
+    public T getElementByIndex(int index) {
         return objects[index];
     }
 
-    @Override
     public boolean clearCollection() {
         for (int i = 0; i < size; i++) {
-            objects[i] = 0;
+            objects[i] = null;
         }
         return true;
     }
 
-    @Override
-    public boolean sortCollection() {
-        return false;
+    public boolean sortCollection(MyArrayList myArrayList) {
+        QuickSort.quickSortMyArrayList(myArrayList);
+        return true;
     }
 
-    public void printCollection(){
+    public void printCollection() {
         for (int i = 0; i < size; i++) {
-            System.out.println(objects[i]);
+            System.out.print(objects[i]);
+            System.out.print(' ');
         }
+        System.out.println();
     }
 
 }
